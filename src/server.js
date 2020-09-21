@@ -9,7 +9,7 @@ const cors = require('cors');
 //const morgan = require('morgan');
 const usersrouter=require('./auth/router.js');
 //const notFoundHandler = require('./');
- //const serverErrorHandler = require('./middleware/500');
+//const serverErrorHandler = require('./middleware/500');
 app.use(express.json());
 //app.use(serverErrorHandler);
 app.use(cors());
