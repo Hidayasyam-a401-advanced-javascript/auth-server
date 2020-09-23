@@ -8,9 +8,13 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 //const morgan = require('morgan');
 const usersrouter=require('./auth/router.js');
+const extraroutes=require('./auth/extra-routes');
+const { requestTime } = require('./middleware/timestamp');
+
 //const notFoundHandler = require('./');
- //const serverErrorHandler = require('./middleware/500');
+//const serverErrorHandler = require('./middleware/500');
 app.use(express.json());
+app.use(requestTime);
 //app.use(serverErrorHandler);
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -20,6 +24,7 @@ app.use(bodyParser.json());
 
 //app.use('/',(req,res)=>{res.send('Hi')});
 app.use('/v1',usersrouter);
+app.use('/v1',extraroutes);
 //======================== Error Handler ===========================
 //app.get('/badrequest', (req, res) => { throw new Error('Bad Request !! '); });
 //app.use('*', notFoundHandler);
