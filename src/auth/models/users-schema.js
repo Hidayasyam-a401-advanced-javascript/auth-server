@@ -11,11 +11,19 @@ const Users = mongoose.Schema({
 
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  // fullname : {type: String, required:true},
-  // email:{type: String, required:true, unique: true },
-  //role:{enum: ['admin', 'editor', 'writer','user']},
-
+  fullname : {type: String, required:true},
+  email:{type: String, required:true, unique: true },
+  role: {type: String,enum: ['admin', 'editor', 'writer','user']},
+  
 });
+
+let roles = {
+  user: ['read'],
+  editor: ['read', 'create', 'update'],
+  admin: ['read','read-submisi' , 'create', 'update', 'delete'],
+  writer: ['read', 'create'],
+};
+
 Users.plugin(uniqueValidator);
 Users.pre('save', async function (next) {
   this.password = await bcrypt.hash(this.password, 10);
