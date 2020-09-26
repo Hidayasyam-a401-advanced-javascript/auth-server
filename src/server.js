@@ -26,7 +26,7 @@ app.use(bodyParser.json());
 app.use('/v1',usersrouter);
 app.use('/v1',extraroutes);
 //======================== Error Handler ===========================
-//app.get('/badrequest', (req, res) => { throw new Error('Bad Request !! '); });
+app.get('/badrequest', (req, res) => { throw new Error('Bad Request !! '); });
 //app.use('*', notFoundHandler);
 
 

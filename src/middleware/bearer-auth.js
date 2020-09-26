@@ -11,11 +11,12 @@ module.exports  = (req, res, next) => {
     let newuser=new users();
     const auth = req.headers.authorization.split(' ');
     if (auth[0] === 'Bearer') {
-        console.log('req.headers.authorization ---> ', req.headers.authorization);
+       // console.log('req.headers.authorization ---> ', req.headers.authorization);
         const token = auth[1];
         newuser.bearerMiddleware(token).then(validuser => {
-            //console.log('bearerMiddleware ---> valid : ', validuser);
+            console.log('bearerMiddleware ---> valid : ', validuser);
             req.user = validuser;
+        console.log('req.user',req.user);
             next();
         }).catch(err => next('Invalid Token!'));
 
