@@ -4,13 +4,16 @@ const { server } = require('../src/server.js');
 const supergoose = require('@code-fellows/supergoose');
 const mockRequest = supergoose(server);
 //const bcrypt = require('bcrypt');
-
+const jwt = require('jsonwebtoken');
 
 describe('Users ', () => {
   it('singup ', async () => {
     const Obj = {
-      username: 'Waleed Faraj',
-      password: 'waleed2546',
+      username: 'Waleed Faraj33',
+      password: 'wal1e2ed2546',
+      fullname: 'Waleed Faraj',
+      email:'Waleed3@gmail.com',
+      role:'editor',
     };
 
     //let passwordencrybt = await bcrypt.hash(Obj.password, 10);
@@ -21,40 +24,22 @@ describe('Users ', () => {
 
   });
 
-
-
-  it('singup ', async () => {
+  it('test signin', async () => {
     const Obj = {
-      username: 'Waleed Faraj3',
+      username: 'Waleed Faraj33',
       password: 'wal1e2ed2546',
+      fullname: 'Waleed Faraj',
+      email:'Waleessd3@gmail.com',
+      role:'editor',
     };
 
-   // let passwordencrybt = await bcrypt.hash(Obj.password, 10);
-    const data = await mockRequest.post('/v1/signup').send(Obj);
-    const record = data.body;
-    console.log('Data : ', record);
-    const data_two = await mockRequest.post('/v1/signup').send(Obj);
-
-    expect(data_two.body).toEqual({});
-
+    await mockRequest.post('/v1/signup').send(Obj);
+    const results = await mockRequest.post('/v1/signin').auth(Obj.username, Obj.password);
+    const decoded = jwt.verify(results.body.token, process.env.JWT_SECRET_KEY);
+    expect(decoded).toBeDefined();
   });
 
-
-//   it('singup ', async () => {
-//     const Obj = {
-//       username: 'Waleed Faraj3',
-//       password: 'wal1e2ed2546',
-//     };
-
-//    // let passwordencrybt = await bcrypt.hash(Obj.password, 10);
-//     const data = await mockRequest.post('/v1/signup').send(Obj);
-//     const record = data.body;
-//     console.log('Data : ', record);
-//     const data_two = await mockRequest.post('/v1/signup').send(Obj);
-
-//     expect(data_two.body).toEqual({});
-
-//   });
+  
 
 
 });

@@ -17,12 +17,6 @@ const Users = mongoose.Schema({
   
 });
 
-let roles = {
-  user: ['read'],
-  editor: ['read', 'create', 'update'],
-  admin: ['read','read-submisi' , 'create', 'update', 'delete'],
-  writer: ['read', 'create'],
-};
 
 Users.plugin(uniqueValidator);
 Users.pre('save', async function (next) {
@@ -31,9 +25,10 @@ Users.pre('save', async function (next) {
 });
 
 Users.methods.authenticateUser = async function () {
-  const { username, password } = this;
+  const { username, password} = this;
 
   const record = await this.constructor.findOne({ username });
+  console.log('record--> ',record);
   const Valid = await bcrypt.compare(password, record.password);
   return { record, Valid };
 };
@@ -42,6 +37,7 @@ Users.methods.bearerMiddleware = async function (token) {
   //console.log('bearerMiddleware----> ',token);
   try {
     let obj = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    console.log('Obj -- >', obj);
     let data = obj.username;
     let getuser = await this.constructor.findOne({ username: data });
     //console.log('bearerMiddleware----> ', getuser.username);
@@ -58,9 +54,21 @@ Users.methods.bearerMiddleware = async function (token) {
   }
 };
 Users.methods.generateToken = async function () {
-  const { username } = this;
-  const token = jwt.sign({ username }, process.env.JWT_SECRET_KEY);
+  const { username , role } = this;
+  console.log('this ----> ',{ username , role });
+  const token = jwt.sign({ username , role}, process.env.JWT_SECRET_KEY);
   return token;
+};
+let roles = {
+  user: ['read'],
+  editor: ['read', 'create', 'update'],
+  admin: ['read','read-submisi' , 'create', 'update', 'delete'],
+  writer: ['read', 'create'],
+};
+
+Users.statics.can = function (user_role, permission) {
+  console.log('user_role : ',user_role, 'permission : ', permission );
+  return roles[user_role].includes(permission);
 };
 
 module.exports = mongoose.model('Users', Users);

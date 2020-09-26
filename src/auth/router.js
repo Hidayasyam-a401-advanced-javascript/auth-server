@@ -16,19 +16,20 @@ router.get('/users', getuser);
 
 function postuser(req, res) {
   let newUser= new Users(req.body);
-  newUser.save().then(()=>res.send(newUser)).catch(err=>res.send(err.errors));
+  newUser.save().then(()=>res.status(200).send(newUser)).catch(err=>res.send(err.errors));
 }
 
 
 async function postuserAuth(req, res) {
   const { record, Valid } = req;
   if (Valid) {
-    const authUser = new Users({ username: record.username });
+    const authUser = new Users({ username: record.username , role:record.role});
     const token = await authUser.generateToken();
+    res.cookie('token ', token, { maxAge: 500000, httpOnly: true });
     res.status(200).send({ record, token });
     //console.log(authUser.role);
   } else {
-    res.status(401).send({ msg: 'username/password is incorrect' });
+    res.status(401).send( 'invalid login data ...!');
   }
 }
 
