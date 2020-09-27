@@ -11,8 +11,8 @@ const Users = mongoose.Schema({
 
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  fullname : {type: String, required:true},
-  email:{type: String, required:true, unique: true },
+  fullname : {type: String, required:false},
+  email:{type: String, required:false, unique: true },
   role: {type: String,enum: ['admin', 'editor', 'writer','user']},
   
 });

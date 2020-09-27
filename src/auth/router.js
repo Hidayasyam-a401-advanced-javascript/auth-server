@@ -6,7 +6,6 @@ const Users = require('./models/users-schema.js');
 const router = express.Router();
 const basicAuth = require('../middleware/basic.js');
 
-
 //=========================== Router ========================================
 
 router.post('/signup', postuser);
@@ -39,7 +38,6 @@ async function getuser(req, res) {
   let v = await Users.find();
   res.send(v);
 }
-
 
 
 module.exports = router;

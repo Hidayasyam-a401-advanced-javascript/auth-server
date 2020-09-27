@@ -10,6 +10,7 @@ const cors = require('cors');
 const usersrouter=require('./auth/router.js');
 const extraroutes=require('./auth/extra-routes');
 const { requestTime } = require('./middleware/timestamp');
+const ouath = require('./middleware/oauth');
 
 //const notFoundHandler = require('./');
 //const serverErrorHandler = require('./middleware/500');
@@ -23,6 +24,11 @@ app.use(bodyParser.json());
 //======================== Globle Routes ===========================
 
 //app.use('/',(req,res)=>{res.send('Hi')});
+
+app.get('/oauth', ouath, (req, res)=> {
+  res.status(200).send(req.token);
+});
+
 app.use('/v1',usersrouter);
 app.use('/v1',extraroutes);
 //======================== Error Handler ===========================
