@@ -1,6 +1,6 @@
 const users = require('../auth/models/users-schema');
 const superagent = require('superagent');
-
+require('dotenv').config();
 
 module.exports = async (req, res, next)=> {  
   let code = req.query.code;
@@ -13,14 +13,11 @@ module.exports = async (req, res, next)=> {
 
 };
 
-const CLIENT_ID = '852c751c14867203239b';
-const CLINET_SECRET = 'b45853fd3418a1ede302d7b95fb1f653853e4337';
-
 async function exchangeCodeWithToken(code) {
   const urlToGetToken = 'https://github.com/login/oauth/access_token';
   const response = await superagent.post(urlToGetToken).send({
-    client_id: CLIENT_ID,
-    client_secret: CLINET_SECRET,
+    client_id: process.env.CLIENT_ID,
+    client_secret:process.env.CLINET_SECRET,
     code: code,
     redirect_uri: 'http://localhost:4000/oauth',
   });
